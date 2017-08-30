@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loginfund.dao.BaseDataDao">
+
+	<select id="getAllScale" resultType="com.loginfund.model.Scale">
+		SELECT * FROM inviting_scale
+		order by id
+	</select>
+	<select id="getAllField" resultType="com.loginfund.model.Field">
+		SELECT id,name_zh
+		fieldDesc_cn, name_en fieldDesc_en FROM inviting_basedata
+		where
+		type='2' order by order_num
+	</select>
+	<select id="getAllCountry" resultType="com.loginfund.model.Country">
+		SELECT id,name_zh
+		countryDesc_cn, name_en countryDesc_en FROM
+		inviting_basedata where
+		type='1'
+		<if test="countryList != null"> and name_en in(${countryList}) </if>
+
+		order by order_num
+	</select>
+	<select id="getPaymentMethodByCoverage" resultType="com.loginfund.model.PaymentMethod">
+		SELECT * FROM
+		inviting_pm where lower(coverage)=lower(#{coverage}) order by
+		sort
+	</select>
+	<select id="getAllAccount" parameterType="String"
+		resultType="com.loginfund.model.Account">
+		SELECT * FROM
+		inviting_account
+		order by id
+	</select>
+	<select id="getAccountByEmail" resultType="com.loginfund.model.Account">
+		SELECT t1.*,t2.name_en
+		countryDesc_en,t2.name_es
+		countryDesc_es FROM
+		inviting_account
+		t1,inviting_basedata t2
+		where
+		t1.contryId=t2.id and
+		t2.type='1'
+		and
+		t1.email=#{email}
+	</select>
+	<select id="getInfoByEmail" resultType="com.loginfund.model.Info">
+		SELECT t1.*,t2.name_en as
+		fieldDesc_en,t3.scaleDesc_en FROM
+		inviting_info
+		t1,inviting_basedata
+		t2,inviting_scale t3 where
+		t1.fieldId=t2.id and
+		t1.scaleId=t3.id and
+		t2.type='2'and t1.email=#{email}
+	</select>
+
+	<insert id="addAccount" parameterType="com.loginfund.model.Account"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		inviting_account
+		(email,
+		contryId,
+		userName,
+		companyName,
+		tel
+		)
+		VALUES
+		(#{email},
+		#{contryId},
+		#{userName},
+		#{companyName},
+		#{tel});
+	</insert>
+
+	<insert id="addInfo" parameterType="com.loginfund.model.Info"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `inviting_info`
+		(title_en,
+		description_en,
+		scaleId,
+		fieldId,
+		countryId,
+		email)
+		VALUES
+		(#{title_en},
+		#{description_en},
+		#{scaleId},
+		#{fieldId},
+		#{countryId},
+		#{email}
+		);
+	</insert>
+
+	<update id="updateAccount">
+		update inviting_account
+		<set>
+			<if test="tel != null">tel=#{tel},</if>
+			<if test="email != null">email=#{email}</if>
+		</set>
+		where id=#{id}
+	</update>
+	<update id="updateInfo">
+		update inviting_info
+		<set>
+			<if test="scaleId != null">scaleId=#{scaleId},</if>
+			<if test="email != null">email=#{email}</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="getCreditCodeCount" resultType="int">
+		select count(*) from
+		inviting_credit_code where email is null
+	</select>
+	<select id="getCreditCodeByrand" resultType="String">
+		SELECT
+		code
+		FROM
+		inviting_credit_code
+		WHERE
+		email IS NULL
+		LIMIT #{randNum} , 1;
+	</select>
+	<select id="getCreditCodeByemail" resultType="String">
+		SELECT code FROM
+		inviting_credit_code where email=#{email}
+	</select>
+	<select id="checkCreditCode" resultType="int">
+		SELECT count(*) FROM
+		inviting_credit_code where code=#{code} and email is not null
+	</select>
+	<select id="checkCreditCodeOfAccount" resultType="int">
+		SELECT count(*)
+		FROM inviting_account where email=#{email} and credit_code is not null
+	</select>
+	<update id="addCreditCodeToAccount">
+		update inviting_account set credit_code=#{code} where
+		email=#{email};
+	</update>
+	<update id="updateCreditCode">
+		update inviting_credit_code set email=#{email} where
+		code=#{code}
+	</update>
+	<insert id="createPayment" parameterType="com.loginfund.model.Payment">
+		insert into
+		inviting_payment(id,email,cmd,business,amount,pay_url)
+		values
+		(#{id},#{email},#{cmd},#{business},#{amount},#{pay_url})
+	</insert>
+
+	<select id="getPaymentByID" resultType="com.loginfund.model.Payment">
+		SELECT * FROM
+		inviting_payment where id=#{id}
+	</select>
+
+	<update id="updatePaymentStatus">
+		update inviting_payment set status='1'
+		,
+		txn_id=#{txn_id} ,finish_time =now()
+		where id=#{id};
+	</update>
+
+
+	<select id="getPaymentStatus" resultType="String">
+		SELECT status FROM
+		inviting_payment where id=#{id};
+	</select>
+
+
+	<update id="updateAccountPaymentStatus">
+		update inviting_account
+		SET
+		pay_status = '1',
+		pay_amount = #{amount},
+		pay_time =
+		NOW()
+		WHERE
+		email =
+		(SELECT
+		email
+		FROM
+		inviting_payment
+		WHERE
+		id =
+		#{id});
+	</update>
+	<update id="updateCreditCodeStatus">
+		UPDATE inviting_info
+		SET
+		is_top = - UNIX_TIMESTAMP()
+		WHERE
+		email = (SELECT
+		email
+		FROM
+		inviting_credit_code
+		WHERE
+		code = (SELECT
+		credit_code
+		FROM
+		inviting_account
+		WHERE
+		email = (SELECT
+		email
+		FROM
+		inviting_payment
+		WHERE
+		id =
+		#{id})));
+
+		UPDATE inviting_credit_code
+		SET
+		email
+		= NULL
+		WHERE
+		code =
+		(SELECT
+		credit_code
+		FROM
+		inviting_account
+		WHERE
+		email =
+		(SELECT
+		email
+		FROM
+		inviting_payment
+		WHERE
+		id =
+		#{id}));
+	</update>
+	<update id="updateRequestStatus">
+		update inviting_account set
+		request_status='1',request_tel=#{tel},pay_amount=#{amount} where
+		email=#{email}
+	</update>
+	<insert id="addContactInfo" parameterType="com.loginfund.model.ContactInfo">
+		insert into
+		inviting_contact(countryId,subject,message,name,tel,email)
+		values(#{countryId},#{subject},#{message},#{name},#{tel},#{email})
+	</insert>
+	<select id="getReceiveEmail" resultType="com.loginfund.model.ReciveEmail">
+		select *
+		from
+		inviting_receive_newmsg where countryId=#{countryId}
+	</select>
+</mapper>

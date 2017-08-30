@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+body {
+	text-align: left;
+	background-image: url("../images/online_bg.jpg"); 
+	background-repeat: repeat-y;
+}
+ #onlinePayment{ 
+ 
+
+ }
+ 
+ 
+ #onlinePayment_bottom{ 
+  background-image: url("../images/online_bg2.jpg"); 
+  background-position:bottom;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 255px;
+
+ }

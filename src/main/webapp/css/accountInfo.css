@@ -1,0 +1,85 @@
+@CHARSET "UTF-8";
+
+body {
+
+}
+#accountInfo_1{
+  background-image: url("../images/accountInfo_bg_1.jpg"); 
+  background-position:bottom;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 309px;
+}
+#accountInfo_2{
+  background-image: url("../images/accountInfo_bg_2.jpg"); 
+  background-position:bottom;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 238px;
+}
+#accountInfo_3{
+  background-image: url("../images/accountInfo_bg_3.jpg"); 
+  background-position:bottom;
+  background-repeat:repeat-y;
+  width: 100%;
+  height: 276px;
+}
+.container {
+	width: 600px;
+}
+.tips{
+	background-color: #ffa03a;
+	color: white;
+}
+.label-title{
+	background-color: #ffc67d;
+}
+#email_lbl {
+	width: 50px;
+}
+
+#code_lbl {
+	width: 50px;
+}
+#code_lbl1 {
+	width: 53px;
+}
+/*验证码输入框长度+按钮长度=邮件输入框长度*/
+#input_email {
+	width: 260px;
+}
+
+#code {
+	width: 198px;	
+	font-weight: 400;
+}
+
+#generateBtn {
+	width: 62px;
+}
+dd{	
+word-wrap:break-word;
+}
+
+
+
+
+#container a:link {
+	color: #ff6600;
+	text-decoration:none;
+} /* 未被访问的链接 */
+#container a:visited {
+	color: #ff6600;
+	text-decoration:none;
+} /* 已被访问的链接 */
+
+#container a:hover {
+	color: #ff6600;
+	text-decoration: none;
+} /* 鼠标指针移动到链接上 */
+#container a:active {
+	color: #ff6600;
+	text-decoration:none;
+} /* 正在被点击的链接 */
+
+
