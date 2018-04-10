@@ -5,34 +5,18 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="
     http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
     http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd
     http://www.springframework.org/schema/mvc
-    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+    http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 
 	<!-- 扫描controller（controller层注入） -->
-	<context:component-scan base-package="com.loginfund.controller" />
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="com.loginfund.interceptor.LoginInterceptor">
-				<property name="excludedUrls">
-					<list>
-						<!-- 如下页面必须登录后才能操作 -->
-						<value>accountInfo</value>
-						<value>onlinePayment</value>
-						<value>paymentTransfer</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
-
-
+	<context:component-scan base-package="cn.miniconch.controller" />
+	<mvc:annotation-driven />
 	<!-- 避免IE在ajax请求时，返回json出现下载 -->
 	<bean id="jacksonMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
 				<value>text/html;charset=UTF-8</value>
@@ -46,21 +30,4 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/views/" p:suffix=".jsp" />
 
-	<!-- 配置国际化资源文件路径 -->
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename">
-			<!-- 定义消息资源文件的相对路径 -->
-			<value>messages/message</value>
-		</property>
-	</bean>
-	<!-- 基于Cookie的本地化解析器
-	<bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">		
-	</bean>
-	 -->
-	 <bean id="localeResolver"
-		class="com.loginfund.util.MyLocaleResolver">		
-	</bean>
-	
 </beans>

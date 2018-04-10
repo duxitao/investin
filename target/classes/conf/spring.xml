@@ -14,11 +14,5 @@
 	<context:property-placeholder location="classpath:conf/app.properties"
 		ignore-unresolvable="true" />
 	<!-- 扫描文件（自动将servicec层注入） -->
-	<context:component-scan base-package="com.loginfund.service" />
-
-	<bean id="appConfig" class="com.loginfund.util.AppConfig">
-		<constructor-arg name="fileName" value="conf/app.properties" />
-	</bean>
-
-
+	<context:component-scan base-package="cn.miniconch.service" />
 </beans>

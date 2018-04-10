@@ -70,39 +70,4 @@
 		<servlet-name>spring</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-
-	<!-- 避免拦截静态文件js/css等 -->
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.png</url-pattern>
-		<url-pattern>*.ico</url-pattern>
-		<url-pattern>*.jpg</url-pattern>
-		<url-pattern>*.js</url-pattern>
-		<url-pattern>*.css</url-pattern>
-		<url-pattern>*.eot</url-pattern>
-		<url-pattern>*.svg</url-pattern>
-		<url-pattern>*.ttf</url-pattern>
-		<url-pattern>*.woff</url-pattern>		
-	</servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file></welcome-file>
-	</welcome-file-list>
-
-	<!-- 错误跳转页面 -->
-	<error-page>
-		<!-- 路径不正确 -->
-		<error-code>404</error-code>
-		<location>/WEB-INF/errorpage/404.jsp</location>
-	</error-page>
-	<error-page>
-		<!-- 没有访问权限，访问被禁止 -->
-		<error-code>405</error-code>
-		<location>/WEB-INF/errorpage/exception.jsp</location>
-	</error-page>
-	<error-page>
-		<!-- 内部错误 -->
-		<error-code>500</error-code>
-		<location>/WEB-INF/errorpage/exception.jsp</location>
-	</error-page>
 </web-app>

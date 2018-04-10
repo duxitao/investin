@@ -75,13 +75,11 @@
 	<!-- spring与mybatis整合配置，扫描所有dao并实现 原理分析：https://mybatis.github.io/spring/zh/mappers.html 
 		http://www.07net01.com/2014/09/124189.html -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-		p:basePackage="com.loginfund.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory" />
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-		p:basePackage="com.loginfund.hmdao" p:sqlSessionFactoryBeanName="sqlSessionFactory_hm" />
+		p:basePackage="cn.miniconch.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory" />
+
 	<!-- 对数据源进行事务管理 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-		p:dataSource-ref="dataSource" />
-	<!-- 对数据源进行事务管理 -->
+		p:dataSource-ref="dataSource" />	
 
 </beans>
